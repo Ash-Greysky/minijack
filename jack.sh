@@ -25,10 +25,19 @@ while true; do
     echo "Try again."
 done
 
+firstdraw=true
+
+while [[ "$firstdraw" == true ]]; do
+	dcard=$((RANDOM%11+1))
 
         echo "Dealers first card is $dealer"
 sleep 0.5
-        echo "Your first card is $you"
+        echo "Your first cards are $you and $dcard"
+
+	you=$((dcard+you))
+	firstdraw=false
+done
+
 
 while (( you < 21 )); do
         sleep 0.5
