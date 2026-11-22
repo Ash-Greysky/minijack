@@ -61,7 +61,7 @@ while [[ "$firstdraw" == true ]]; do
         echo "Dealers first card is $dealer"
 
 sleep 0.5
-        echo "Your first cards are $you and $dcard"
+        echo "Your starting hand is $you and $dcard"
 
 if [[ $dealer == A ]]; then
    deal_aces=$((deal_aces + 1))
