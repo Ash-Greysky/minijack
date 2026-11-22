@@ -1,8 +1,7 @@
-
 #! /usr/bin/bash
 
 
-
+cash=1000
 
 while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 
@@ -11,31 +10,33 @@ echo "---------MINI JACK---------"
 sleep 0.5
 for player in dealer you ; do
 
-	card=$((RANDOM%11+1))
-	declare "$player=$card"
+        card=$((RANDOM%11+1))
+        declare "$player=$card"
 done
-	echo "Dealers first card is $dealer"
+        echo "You have \$$cash."
+read -r -p "Enter bet: " bet
+        echo "Dealers first card is $dealer"
 sleep 0.5
-	echo "Your first card is $you"
+        echo "Your first card is $you"
 
 while (( you < 21 )); do
-	sleep 0.5
-	read -r -p "Hit or Stay? q to quit game[h/s/q] " choice || break
+        sleep 0.5
+        read -r -p "Hit or Stay? q to quit game[h/s/q] " choice || break
 
-	if [[ "$choice" == "q" ]]; then
-	clear
-	 break
+        if [[ "$choice" == "q" ]]; then
+        clear
+         break
 
-	elif [[ "$choice" == "h" ]]; then
-	card=$((RANDOM%11+1))
-	 echo "You draw $card"
+        elif [[ "$choice" == "h" ]]; then
+        card=$((RANDOM%11+1))
+         echo "You draw $card"
 sleep 0.5
-	you=$((you+card))
-	 echo "Your total is $you"
+        you=$((you+card))
+         echo "Your total is $you"
 
-	elif [[ "$choice" == "s" ]]; then
-		break
-	fi
+        elif [[ "$choice" == "s" ]]; then
+                break
+        fi
 done
 
 [[ "$choice" == "q" ]] && break
@@ -43,29 +44,39 @@ done
 if (( you <= 21 )); then
 
 while (( dealer < 17 )); do
-	card=$((RANDOM%11+1))
-	 echo "Dealer draws $card"
+        card=$((RANDOM%11+1))
+         echo "Dealer draws $card"
 sleep 0.8
-	 dealer=$((dealer+card))
-	 echo "Dealer's total is $dealer"
+         dealer=$((dealer+card))
+         echo "Dealer's total is $dealer"
 sleep 1
-	done
+        done
 fi
 sleep 1
 
 if (( you > 21 )); then
-	echo "You got $you! You're bust!"
+        cash=$((cash-bet))
+        echo "You got $you! You're bust! -\$$bet"
 elif (( dealer > 21)); then
-	echo -e "Dealer got $dealer, they're bust!\nYou win!"
+        cash=$((cash+bet))
+        echo -e "Dealer got $dealer, they're bust!\nYou win! +\$$bet"
 elif (( you > dealer )); then
-	echo -e "You $you vs. $dealer Dealer\nYou Win!"
+        cash=$((cash+bet))
+        echo -e "You $you vs. $dealer Dealer\nYou Win! +\$$bet"
 elif (( you < dealer )); then
-	echo -e "You $you vs. $dealer Dealer\nYou lose!"
+        cash=$((cash-bet))
+        echo -e "You $you vs. $dealer Dealer\nYou lose! -\$$bet"
 else
-	echo "It's a draw!"
+        echo "It's a draw!"
 fi
 
-	read -r -p "Play again?[y/n] " ans 
+        read -r -p "Play again?[y/n] " ans
+
+
+if ((cash <= 0 )); then
+        echo "You're bankrupt! No money left!"
+        break
+fi
 
 clear
 done
