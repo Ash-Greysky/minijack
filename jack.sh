@@ -13,8 +13,19 @@ for player in dealer you ; do
         card=$((RANDOM%11+1))
         declare "$player=$card"
 done
+
         echo "You have \$$cash."
-read -r -p "Enter bet: " bet
+
+while true; do
+    read -r -p "Place your bet: " bet
+
+    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )); then
+        break
+    fi
+    echo "Try again."
+done
+
+
         echo "Dealers first card is $dealer"
 sleep 0.5
         echo "Your first card is $you"
