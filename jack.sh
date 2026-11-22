@@ -2,9 +2,32 @@
 
 ##22/11/2026 100% handwritten !!! :)
 
+##let's set up an array of cards.
+
+deckofcards=(A 2 3 4 5 6 7 8 9 10 J Q K)
+numcards=${#deckofcards[*]}
+
+A=11
+J=10
+Q=10
+K=10
+
+##echo "These are my cards ${deckofcards[*]}"
+
+##card=${deckofcards[$((RANDOM%numcards))]}
+##echo "You draw a $card"
+
+##card=${deckofcards[$((RANDOM%numcards))]}
+##echo "Dealer draws a $card"
+
+
+##let's go gamble!
 cash=1000
 
 while [[ "$choice" != "q" && "$ans" != "n" ]]; do
+
+soft_aces=0
+deal_aces=0
 
 clear
 echo "---------MINI JACK---------"
@@ -24,8 +47,9 @@ done
 
 for player in dealer you ; do
 
-        card=$((RANDOM%11+1))
+        card=${deckofcards[$((RANDOM%numcards))]}
         declare "$player=$card"
+
 done
 
 ##Give player 2 cards on first turn
@@ -33,11 +57,21 @@ done
 firstdraw=true
 
 while [[ "$firstdraw" == true ]]; do
-	dcard=$((RANDOM%11+1))
-
+	dcard=${deckofcards[$((RANDOM%numcards))]}
         echo "Dealers first card is $dealer"
+
 sleep 0.5
         echo "Your first cards are $you and $dcard"
+
+if [[ $dealer == A ]]; then
+   deal_aces=$((deal_aces + 1))
+
+elif [[ $you == A ]]; then
+    soft_aces=$((soft_aces + 1))
+
+elif [[ $dcard == A ]]; then 
+   soft_aces=$((soft_aces + 1))
+fi
 
 	you=$((dcard+you))
 	firstdraw=false
@@ -54,10 +88,22 @@ while (( you < 21 )); do
          break
 
         elif [[ "$choice" == "h" ]]; then
-        card=$((RANDOM%11+1))
+	card=${deckofcards[$((RANDOM%numcards))]}
          echo "You draw $card"
 sleep 0.5
-        you=$((you+card))
+
+
+if [[ $card == A ]]; then
+    soft_aces=$((soft_aces + 1))
+fi
+
+you=$((you+card))
+
+while (( you > 21 && soft_aces > 0 )); do
+    you=$((you - 10))
+    soft_aces=$((soft_aces - 1))
+done
+
          echo "Your total is $you"
 
         elif [[ "$choice" == "s" ]]; then
@@ -70,12 +116,29 @@ done
 ##game end conditions
 
 if (( you <= 21 )); then
+	if (( you == 21)); then
+sleep 1
+	echo "***BLACKJACK***"
+sleep 1.5
+	fi
 
 while (( dealer < 17 )); do
-        card=$((RANDOM%11+1))
-         echo "Dealer draws $card"
+        card=${deckofcards[$((RANDOM%numcards))]}
+	sleep 1
+	 echo "Dealer draws $card"
+if [[ $card == A ]]; then
+    deal_aces=$((deal_aces + 1))
+fi
+
+
 sleep 0.8
          dealer=$((dealer+card))
+
+while (( dealer > 21 && deal_aces > 0 )); do
+    dealer=$((dealer - 10))
+    deal_aces=$((deal_aces - 1))
+done
+
          echo "Dealer's total is $dealer"
 sleep 1
         done
@@ -101,7 +164,7 @@ elif (( you < dealer )); then
 else
         echo "It's a draw!"
 fi
-
+sleep 1
         read -r -p "Play again?[y/n] " ans
 
 
