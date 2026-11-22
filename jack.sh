@@ -1,5 +1,6 @@
 #! /usr/bin/bash
 
+##22/11/2026 100% handwritten !!! :)
 
 cash=1000
 
@@ -8,12 +9,6 @@ while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 clear
 echo "---------MINI JACK---------"
 sleep 0.5
-for player in dealer you ; do
-
-        card=$((RANDOM%11+1))
-        declare "$player=$card"
-done
-
         echo "You have \$$cash."
 
 while true; do
@@ -24,6 +19,16 @@ while true; do
     fi
     echo "Try again."
 done
+
+## Deal cards
+
+for player in dealer you ; do
+
+        card=$((RANDOM%11+1))
+        declare "$player=$card"
+done
+
+##Give player 2 cards on first turn
 
 firstdraw=true
 
@@ -38,6 +43,7 @@ sleep 0.5
 	firstdraw=false
 done
 
+##Main game loop
 
 while (( you < 21 )); do
         sleep 0.5
@@ -61,6 +67,8 @@ done
 
 [[ "$choice" == "q" ]] && break
 
+##game end conditions
+
 if (( you <= 21 )); then
 
 while (( dealer < 17 )); do
@@ -77,15 +85,19 @@ sleep 1
 if (( you > 21 )); then
         cash=$((cash-bet))
         echo "You got $you! You're bust! -\$$bet"
+
 elif (( dealer > 21)); then
         cash=$((cash+bet))
         echo -e "Dealer got $dealer, they're bust!\nYou win! +\$$bet"
+
 elif (( you > dealer )); then
         cash=$((cash+bet))
         echo -e "You $you vs. $dealer Dealer\nYou Win! +\$$bet"
+
 elif (( you < dealer )); then
         cash=$((cash-bet))
         echo -e "You $you vs. $dealer Dealer\nYou lose! -\$$bet"
+
 else
         echo "It's a draw!"
 fi
