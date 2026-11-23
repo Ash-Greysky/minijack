@@ -31,13 +31,14 @@ clear
 
 splashfr=20
 while (( splashfr > 0 )); do
-        for frame in '|||||||||*MINIJACK*|||||||||' '/////////*MINIJACK*\\\\\\\\\' '---------*MINIJACK*---------' '\\\\\\\\\*MINIJACK*/////////'; do
+        for frame in  '\\\\\\\\\*MINIJACK*/////////' '|||||||||*MINIJACK*|||||||||' '/////////*MINIJACK*\\\\\\\\\' '---------*MINIJACK*---------'; do
                 printf "\r%s" "$frame"
-                sleep 0.08
+                sleep 0.1
         splashfr=$(( splashfr-1 ))
         done
 done
 
+##old title.jpg
 ##echo "---------MINI JACK---------"
         echo -e "\nYou have \$$cash."
 
@@ -59,7 +60,7 @@ for player in dealer you ; do
 
 done
 
-##Give player 2 cards on first turn
+##Give player($you) 2 cards on first turn
 
 firstdraw=true
 
@@ -70,21 +71,17 @@ while [[ "$firstdraw" == true ]]; do
 sleep 0.5
         echo "Your starting hand is $you and $dcard"
 
-if [[ $dealer == A ]]; then
+if [[ "$dealer" == "A" ]]; then
    deal_aces=$((deal_aces + 1))
 fi
-if [[ $you == A ]]; then
+if [[ "$you" == "A" ]]; then
     soft_aces=$((soft_aces + 1))
 fi
-if [[ $dcard == A ]]; then
+if [[ "$dcard" == "A" ]]; then
    soft_aces=$((soft_aces + 1))
 fi
-
         you=$((dcard+you))
 
-if (( you==22 )); then
-        you=12
-fi
         firstdraw=false
 done
 
@@ -108,7 +105,7 @@ if [[ $card == A ]]; then
     soft_aces=$((soft_aces + 1))
 fi
 
-you=$((you+card))
+	you=$((you+card))
 
 while (( you > 21 && soft_aces > 0 )); do
     you=$((you - 10))
@@ -131,7 +128,7 @@ if (( you <= 21 )); then
 blackjackfr=30
 sleep 1
         while ((you == 21 && blackjackfr > 0 )); do
-        for frame in '|||||||||!BLACKJACK!|||||||||' '/////////*BLACKJACK*\\\\\\\\\' '---------!BLACKJACK!---------' '\\\\\\\\\*BLACKJACK*/////////'; do
+        for frame in '\\\\\\\\\*BLACKJACK*/////////' '|||||||||*BLACKJACK*|||||||||' '/////////!BLACKJACK!\\\\\\\\\' '---------!BLACKJACK!---------' ; do
                 printf "\r%s" "$frame"
                 sleep 0.1
         blackjackfr=$(( blackjackfr - 1 ))
@@ -139,8 +136,7 @@ sleep 1
         done
 printf "\n"
 
-##      echo "***BLACKJACK***"
-        fi
+fi
 
 while (( dealer < 17 )); do
         card=${deckofcards[$((RANDOM%numcards))]}
@@ -189,8 +185,8 @@ sleep 1
 
 
 if ((cash <= 0 )); then
-        echo "You're bankrupt! No money left!"
-        break
+	echo "You're bankrupt! No money left!"
+	break
 fi
 
 clear
