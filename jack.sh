@@ -1,5 +1,4 @@
 #! /usr/bin/bash
-
 ##22/11/2026 100% handwritten !!! :)
 
 ##let's set up an array of cards.
@@ -29,10 +28,17 @@ while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 soft_aces=0
 deal_aces=0
 
+splashfr=20
+while (( splashfr > 0 )); do
 clear
-echo "---------MINI JACK---------"
-sleep 0.5
-        echo "You have \$$cash."
+        for frame in '|||||||||*MINIJACK*|||||||||' '/////////*MINIJACK*\\\\\\\\\' '---------*MINIJACK*---------' '\\\\\\\\\*MINIJACK*/////////'; do
+                printf "\r%s" "$frame"
+                sleep 0.08
+        splashfr=$(( splashfr-1 ))
+        done
+done
+##echo "---------MINI JACK---------"
+        echo -e "\nYou have \$$cash."
 
 while true; do
     read -r -p "Place your bet: " bet
@@ -57,7 +63,7 @@ done
 firstdraw=true
 
 while [[ "$firstdraw" == true ]]; do
-	dcard=${deckofcards[$((RANDOM%numcards))]}
+        dcard=${deckofcards[$((RANDOM%numcards))]}
         echo "Dealers first card is $dealer"
 
 sleep 0.5
@@ -65,16 +71,20 @@ sleep 0.5
 
 if [[ $dealer == A ]]; then
    deal_aces=$((deal_aces + 1))
-
-elif [[ $you == A ]]; then
+fi
+if [[ $you == A ]]; then
     soft_aces=$((soft_aces + 1))
-
-elif [[ $dcard == A ]]; then 
+fi
+if [[ $dcard == A ]]; then
    soft_aces=$((soft_aces + 1))
 fi
 
-	you=$((dcard+you))
-	firstdraw=false
+        you=$((dcard+you))
+
+if (( you==22 )); then
+        you=12
+fi
+        firstdraw=false
 done
 
 ##Main game loop
@@ -88,7 +98,7 @@ while (( you < 21 )); do
          break
 
         elif [[ "$choice" == "h" ]]; then
-	card=${deckofcards[$((RANDOM%numcards))]}
+        card=${deckofcards[$((RANDOM%numcards))]}
          echo "You draw $card"
 sleep 0.5
 
@@ -116,16 +126,25 @@ done
 ##game end conditions
 
 if (( you <= 21 )); then
-	if (( you == 21)); then
+        if (( you == 21)); then
+blackjackfr=30
 sleep 1
-	echo "***BLACKJACK***"
-sleep 1.5
-	fi
+        while ((you == 21 && blackjackfr > 0 )); do
+        for frame in '|||||||||!BLACKJACK!|||||||||' '/////////*BLACKJACK*\\\\\\\\\' '---------!BLACKJACK!---------' '\\\\\\\\\*BLACKJACK*/////////'; do
+                printf "\r%s" "$frame"
+                sleep 0.1
+        blackjackfr=$(( blackjackfr - 1 ))
+        done
+        done
+printf "\n"
+
+##      echo "***BLACKJACK***"
+        fi
 
 while (( dealer < 17 )); do
         card=${deckofcards[$((RANDOM%numcards))]}
-	sleep 1
-	 echo "Dealer draws $card"
+        sleep 0.5
+         echo "Dealer draws $card"
 if [[ $card == A ]]; then
     deal_aces=$((deal_aces + 1))
 fi
@@ -140,10 +159,10 @@ while (( dealer > 21 && deal_aces > 0 )); do
 done
 
          echo "Dealer's total is $dealer"
-sleep 1
+sleep 0.5
         done
 fi
-sleep 1
+sleep 0.5
 
 if (( you > 21 )); then
         cash=$((cash-bet))
