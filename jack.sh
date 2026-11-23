@@ -11,14 +11,13 @@ J=10
 Q=10
 K=10
 
+##debug
 ##echo "These are my cards ${deckofcards[*]}"
-
 ##card=${deckofcards[$((RANDOM%numcards))]}
 ##echo "You draw a $card"
-
 ##card=${deckofcards[$((RANDOM%numcards))]}
 ##echo "Dealer draws a $card"
-
+##/debug
 
 ##let's go gamble!
 cash=1000
@@ -28,15 +27,17 @@ while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 soft_aces=0
 deal_aces=0
 
+clear
+
 splashfr=20
 while (( splashfr > 0 )); do
-clear
         for frame in '|||||||||*MINIJACK*|||||||||' '/////////*MINIJACK*\\\\\\\\\' '---------*MINIJACK*---------' '\\\\\\\\\*MINIJACK*/////////'; do
                 printf "\r%s" "$frame"
                 sleep 0.08
         splashfr=$(( splashfr-1 ))
         done
 done
+
 ##echo "---------MINI JACK---------"
         echo -e "\nYou have \$$cash."
 
