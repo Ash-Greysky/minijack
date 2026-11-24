@@ -40,7 +40,8 @@ done
 
 ##old title.jpg
 ##echo "---------MINI JACK---------"
-        echo -e "\nYou have \$$cash."
+
+echo -e "\nYou have \$$cash."
 
 while true; do
     read -r -p "Place your bet: " bet
@@ -121,11 +122,11 @@ done
 
 [[ "$choice" == "q" ]] && break
 
-##game end conditions
+## $you blackjack
 
 if (( you <= 21 )); then
         if (( you == 21)); then
-blackjackfr=30
+blackjackfr=25
 sleep 1
         while ((you == 21 && blackjackfr > 0 )); do
         for frame in '\\\\\\\\\*BLACKJACK*/////////' '|||||||||*BLACKJACK*|||||||||' '/////////!BLACKJACK!\\\\\\\\\' '---------!BLACKJACK!---------' ; do
@@ -137,6 +138,8 @@ sleep 1
 printf "\n"
 
 fi
+
+##dealer dealing
 
 while (( dealer < 17 )); do
         card=${deckofcards[$((RANDOM%numcards))]}
@@ -160,6 +163,8 @@ sleep 0.5
         done
 fi
 sleep 0.5
+
+##game end
 
 if (( you > 21 )); then
         cash=$((cash-bet))
