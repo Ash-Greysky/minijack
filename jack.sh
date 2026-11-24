@@ -45,7 +45,7 @@ done
 while true; do
     read -r -p "Place your bet: " bet
 
-    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )); then
+    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )) && (( "$bet" > 0 )) && [[ ${#bet} -gt 13 ]] ; then
         break
     fi
     echo "Try again."
