@@ -20,7 +20,7 @@ K=10
 ##/debug
 
 ##let's go gamble!
-cash=1000
+cash=2000
 
 while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 
@@ -46,11 +46,16 @@ echo -e "\nYou have \$$cash."
 while true; do
     read -r -p "Place your bet: " bet
 
-    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )) ; then
+##strip the zeroes because octal
+ bet=$(echo $bet | sed 's/^0*//')
+
+##confirm # input, if afford, if < 64bit
+    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )) && (( "${#bet}" <= 18 )) ; then
         break
     fi
     echo "Try again."
 done
+
 
 ## Deal cards
 
