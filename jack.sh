@@ -44,7 +44,7 @@ done
 echo -e "\nYou have \$$cash."
 
 while true; do
-    read -r -p "Place your bet: " bet
+    read -rp "Place your bet: " bet
 
 ##strip the zeroes because octal
  bet=$(echo $bet | sed 's/^0*//')
@@ -73,8 +73,8 @@ firstdraw=true
 while [[ "$firstdraw" == true ]]; do
         dcard=${deckofcards[$((RANDOM%numcards))]}
         echo "Dealers first card is $dealer"
-
 sleep 0.5
+
         echo "Your starting hand is $you and $dcard"
 
 if [[ "$dealer" == "A" ]]; then
@@ -88,6 +88,9 @@ if [[ "$dcard" == "A" ]]; then
 fi
         you=$((dcard+you))
 
+if (( you == 21)); then
+	natjack=1
+fi
         firstdraw=false
 done
 
@@ -95,7 +98,7 @@ done
 
 while (( you < 21 )); do
         sleep 0.5
-        read -r -p "Hit or Stay? q to quit game[h/s/q] " choice || break
+        read -rp "Hit or Stay? q to quit game[h/s/q] " choice || break
 
         if [[ "$choice" == "q" ]]; then
         clear
@@ -131,6 +134,7 @@ done
 
 if (( you <= 21 )); then
         if (( you == 21)); then
+blackjack=1
 blackjackfr=25
 sleep 1
         while ((you == 21 && blackjackfr > 0 )); do
@@ -141,7 +145,6 @@ sleep 1
         done
         done
 printf "\n"
-
 fi
 
 ##dealer dealing
@@ -169,7 +172,18 @@ sleep 0.5
 fi
 sleep 0.5
 
+##big bux
+if (( natjack == 1 )); then
+	natjack=0
+	bet=$((bet*2))
+
+elif (( blackjack == 1 )); then
+	blackjack=0
+	bet=$((bet/2*3))
+fi
+
 ##game end
+
 
 if (( you > 21 )); then
         cash=$((cash-bet))
@@ -190,13 +204,17 @@ elif (( you < dealer )); then
 else
         echo "It's a draw!"
 fi
+
+
 sleep 1
-        read -r -p "Play again?[y/n] " ans
+        read -rp "Next round? [Enter/y/n] " ans
 
 
 if ((cash <= 0 )); then
 	echo "You're bankrupt! No money left!"
-	break
+	sleep 1
+	read -rp "Hit [Enter] to restart or [q] to quit " choice
+	cash=2000
 fi
 
 clear
