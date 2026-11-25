@@ -1,6 +1,9 @@
 #! /usr/bin/bash
 ##22/11/2026 100% handwritten !!! :)
 
+##learning exercise !
+##please don't gamble real money !!!
+
 ##let's set up an array of cards.
 
 deckofcards=(A 2 3 4 5 6 7 8 9 10 J Q K)
@@ -27,7 +30,7 @@ while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 soft_aces=0
 deal_aces=0
 
-clear
+##clear
 
 splashfr=20
 while (( splashfr > 0 )); do
@@ -38,8 +41,6 @@ while (( splashfr > 0 )); do
         done
 done
 
-##old title.jpg
-##echo "---------MINI JACK---------"
 
 echo -e "\nYou have \$$cash."
 
@@ -50,7 +51,7 @@ while true; do
  bet=$(echo $bet | sed 's/^0*//')
 
 ##confirm # input, if afford, if < 64bit
-    if [[ "$bet" =~ ^[0-9]+$ ]] && (( "$bet" <= "$cash" )) && (( "${#bet}" <= 18 )) ; then
+    if [[ "$bet" =~ ^[0-9]+$ ]] && (( $bet <= $cash && ${#bet} <= 18 )) ; then
         break
     fi
     echo "Try again."
@@ -205,17 +206,21 @@ else
         echo "It's a draw!"
 fi
 
-
 sleep 1
         read -rp "Next round? [Enter/y/n] " ans
 
+if (( ${#cash} >= 17 )) && (( $cash > 0 )); then
+	echo "!!! YOU BROKE THE BANK !!! YOU WIN !!!"
+##really pretty animation goes here.
+	read -rp "Press any button to retire." choice
+	choice=q
 
-if ((cash <= 0 )); then
+elif ((cash <= 0 )); then
 	echo "You're bankrupt! No money left!"
 	sleep 1
 	read -rp "Hit [Enter] to restart or [q] to quit " choice
 	cash=2000
 fi
 
-clear
+##clear
 done
