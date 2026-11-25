@@ -30,7 +30,7 @@ while [[ "$choice" != "q" && "$ans" != "n" ]]; do
 soft_aces=0
 deal_aces=0
 
-##clear
+clear
 
 splashfr=20
 while (( splashfr > 0 )); do
@@ -222,5 +222,5 @@ elif ((cash <= 0 )); then
 	cash=2000
 fi
 
-##clear
+clear
 done
