@@ -41,7 +41,6 @@ while (( splashfr > 0 )); do
         done
 done
 
-
 echo -e "\nYou have \$$cash."
 
 while true; do
@@ -75,19 +74,20 @@ while [[ "$firstdraw" == true ]]; do
         dcard=${deckofcards[$((RANDOM%numcards))]}
         echo "Dealers first card is $dealer"
 sleep 0.5
-
         echo "Your starting hand is $you and $dcard"
 
-if [[ "$dealer" == "A" ]]; then
+if [[ $dealer == A ]]; then
    deal_aces=$((deal_aces + 1))
+	echo "dealer ace plus one"
 fi
-if [[ "$you" == "A" ]]; then
-    soft_aces=$((soft_aces + 1))
-fi
-if [[ "$dcard" == "A" ]]; then
+if [[ $you == A || $dcard == A ]]; then
    soft_aces=$((soft_aces + 1))
 fi
         you=$((dcard+you))
+
+if (( you == 22)); then
+	you=12
+fi
 
 if (( you == 21)); then
 	natjack=1
@@ -131,14 +131,14 @@ done
 
 [[ "$choice" == "q" ]] && break
 
-## $you blackjack
+##if $you blackjack
 
 if (( you <= 21 )); then
         if (( you == 21)); then
 blackjack=1
-blackjackfr=25
+blackjackfr=27
 sleep 1
-        while ((you == 21 && blackjackfr > 0 )); do
+        while (( blackjackfr > 0 )); do
         for frame in '\\\\\\\\\*BLACKJACK*/////////' '|||||||||*BLACKJACK*|||||||||' '/////////!BLACKJACK!\\\\\\\\\' '---------!BLACKJACK!---------' ; do
                 printf "\r%s" "$frame"
                 sleep 0.1
@@ -176,6 +176,7 @@ sleep 0.5
 ##big bux
 if (( natjack == 1 )); then
 	natjack=0
+        blackjack=0
 	bet=$((bet*2))
 
 elif (( blackjack == 1 )); then
@@ -184,7 +185,6 @@ elif (( blackjack == 1 )); then
 fi
 
 ##game end
-
 
 if (( you > 21 )); then
         cash=$((cash-bet))
@@ -212,6 +212,7 @@ sleep 1
 if (( ${#cash} >= 17 )) && (( $cash > 0 )); then
 	echo "!!! YOU BROKE THE BANK !!! YOU WIN !!!"
 ##really pretty animation goes here.
+	sleep 1
 	read -rp "Press any button to retire." choice
 	choice=q
 
