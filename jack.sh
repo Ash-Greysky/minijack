@@ -78,7 +78,6 @@ sleep 0.5
 
 if [[ $dealer == A ]]; then
    deal_aces=$((deal_aces + 1))
-	echo "dealer ace plus one"
 fi
 if [[ $you == A || $dcard == A ]]; then
    soft_aces=$((soft_aces + 1))
@@ -136,7 +135,7 @@ done
 if (( you <= 21 )); then
         if (( you == 21)); then
 blackjack=1
-blackjackfr=27
+blackjackfr=30
 sleep 1
         while (( blackjackfr > 0 )); do
         for frame in '\\\\\\\\\*BLACKJACK*/////////' '|||||||||*BLACKJACK*|||||||||' '/////////!BLACKJACK!\\\\\\\\\' '---------!BLACKJACK!---------' ; do
