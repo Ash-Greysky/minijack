@@ -1,4 +1,4 @@
-#! /usr/bin/bash
+#!/usr/bin/env bash
 ##22/11/2026 100% handwritten !!! :)
 
 ##learning exercise !
@@ -44,10 +44,10 @@ done
 echo -e "\nYou have \$$cash."
 
 while true; do
-    read -rp "Place your bet: " bet
+    read -rp "Place your bet: " bet || break 2
 
 ##strip the zeroes because octal
- bet=$(echo $bet | sed 's/^0*//')
+ bet=$(echo "$bet" | sed 's/^0*//')
 
 ##confirm # input, if afford, if < 64bit
     if [[ "$bet" =~ ^[0-9]+$ ]] && (( $bet <= $cash && ${#bet} <= 18 )) ; then
@@ -96,9 +96,10 @@ done
 
 ##Main game loop
 
+
 while (( you < 21 )); do
         sleep 0.5
-        read -rp "Hit or Stay? q to quit game[h/s/q] " choice || break
+        read -rp "Hit or Stay? q to quit game[h/s/q] " choice || break 2
 
         if [[ "$choice" == "q" ]]; then
         clear
@@ -180,7 +181,7 @@ if (( natjack == 1 )); then
 
 elif (( blackjack == 1 )); then
 	blackjack=0
-	bet=$((bet/2*3))
+	bet=$((bet*3/2))
 fi
 
 ##game end
@@ -206,7 +207,6 @@ else
 fi
 
 sleep 1
-        read -rp "Next round? [Enter/y/n] " ans
 
 if (( ${#cash} >= 17 )) && (( $cash > 0 )); then
 	echo "!!! YOU BROKE THE BANK !!! YOU WIN !!!"
@@ -215,12 +215,16 @@ if (( ${#cash} >= 17 )) && (( $cash > 0 )); then
 	read -rp "Press any button to retire." choice
 	choice=q
 
+elif (( cash > 0 )); then
+        read -rp "Next round? [Enter/y/n] " ans || break
+
 elif ((cash <= 0 )); then
 	echo "You're bankrupt! No money left!"
 	sleep 1
-	read -rp "Hit [Enter] to restart or [q] to quit " choice
+	read -rp "Hit [Enter] to restart or [q] to quit " choice || break
 	cash=2000
 fi
 
 clear
 done
+clear
